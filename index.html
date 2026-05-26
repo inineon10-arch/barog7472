@@ -673,6 +673,7 @@ const MOCK_CSV     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PY
 
 /* ★ Apps Script 웹앱 URL — scan-ocr 시트 Apps Script 배포 URL */
 const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbx5Y3daCCYcLP5WXsusQtrQmIpHrb1t7DyNqbIGRNYGDvYv74ZZ4c9tY_iATFX2krDHHA/exec';
+const API_TOKEN = 'barog-2026-q7x9k2mZ';
 
 /* 스케줄 탭 형식 (헤더 행 1개 + 데이터):
    날짜,       학생,   Day,       문제수(선택)
@@ -797,7 +798,7 @@ function markLocalSubmitted(dateStr, day) {
 /* 서버 제출 기록 조회 (Apps Script doGet) */
 async function fetchServerSubmitted() {
   try {
-    const url = `${SUBMIT_URL}?action=check&student=${encodeURIComponent(STUDENT_NAME)}`;
+    const url = `${SUBMIT_URL}?action=check&student=${encodeURIComponent(STUDENT_NAME)}&token=${encodeURIComponent(API_TOKEN)}`;
     const res = await fetch(url);
     if(!res.ok) return [];
     const json = await res.json();
@@ -1217,7 +1218,7 @@ async function submitResult(correct, total) {
   };
 
   try {
-    const res = await fetch(SUBMIT_URL, {
+   const res = await fetch(SUBMIT_URL + '?token=' + encodeURIComponent(API_TOKEN), {
       method: 'POST',
       body:   JSON.stringify(payload)
     });
